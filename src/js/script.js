@@ -8,8 +8,18 @@ const inputRub = document.querySelector('#rub'),
 inputRub.addEventListener('input', () => {
     const request = new XMLHttpRequest();
 
-    request.open('POST', 'js/current.json');
+    request.open('GET', 'js/current.json');
     request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     request.send();
+
+    request.addEventListener('readystatechange', () => {
+        if(request.readyState === 4 && request.status === 200){
+            console.log(request.response);
+            const date = JSON.parse(request.response);
+            inputUsd.value = +inputRub.value / date.current.usd;
+        } else {
+            inputUsd.value = "Что-то пошло не так";
+        }
+    })
 
 })
